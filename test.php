@@ -1,36 +1,25 @@
-define(‘LINE_API’,”https://notify-api.line.me/api/notify");
- 
-$token = “X29UjrXRORRYtNK1x6DdXqOEUE1bPXN92K4kjIVKLPZ”; //ใส่Token ที่copy เอาไว้
-$str = “Hello!!!!!”; //ข้อความที่ต้องการส่ง สูงสุด 1000 ตัวอักษร
- $headerOptions = array(
- ‘http’=>array(
-   ‘method’=>’POST’,
-   ‘header’=> “Content-Type: application/x-www-form-urlencoded\r\n”
-   .”Authorization: Bearer “.LINE_TOKEN.”\r\n”
-   .”Content-Length: “.strlen($queryData).”\r\n”,
-   ‘content’ => $queryData
- ),
- ‘ssl’=>array(
-   “verify_peer”=>false,
-   “verify_peer_name”=>false,
-  ),
-);
-$res = notify_message($str,$token);
-print_r($res);
-function notify_message($message,$token){
- $queryData = array(‘message’ => $message);
- $queryData = http_build_query($queryData,’’,’&’);
- $headerOptions = array( 
-         ‘http’=>array(
-            ‘method’=>’POST’,
-            ‘header’=> “Content-Type: application/x-www-form-urlencoded\r\n”
-                      .”Authorization: Bearer “.$token.”\r\n”
-                      .”Content-Length: “.strlen($queryData).”\r\n”,
-            ‘content’ => $queryData
-         ),
- );
- $context = stream_context_create($headerOptions);
- $result = file_get_contents(LINE_API,FALSE,$context);
- $res = json_decode($result);
- return $res;
-}
+<?php
+
+$client = new http\Client;
+$request = new http\Client\Request;
+
+$body = new http\Message\Body;
+$body->append(new http\QueryString(array(
+  'message' => 'บอสสโลกเกิดแล้วจ้าาาาา'
+)));
+
+$request->setRequestUrl('https://notify-api.line.me/api/notify');
+$request->setRequestMethod('POST');
+$request->setBody($body);
+
+$request->setHeaders(array(
+  'Postman-Token' => 'e41aa915-3645-4eee-a93f-7c0b85abb934',
+  'Cache-Control' => 'no-cache',
+  'Content-Type' => 'application/x-www-form-urlencoded',
+  'authorization' => 'Bearer X29UjrXRORRYtNK1x6DdXqOEUE1bPXN92K4kjIVKLPZ'
+));
+
+$client->enqueue($request)->send();
+$response = $client->getResponse();
+
+echo $response->getBody();
