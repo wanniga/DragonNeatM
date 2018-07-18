@@ -2,7 +2,19 @@ define(‘LINE_API’,”https://notify-api.line.me/api/notify");
  
 $token = “X29UjrXRORRYtNK1x6DdXqOEUE1bPXN92K4kjIVKLPZ”; //ใส่Token ที่copy เอาไว้
 $str = “Hello!!!!!”; //ข้อความที่ต้องการส่ง สูงสุด 1000 ตัวอักษร
- 
+ $headerOptions = array(
+ ‘http’=>array(
+   ‘method’=>’POST’,
+   ‘header’=> “Content-Type: application/x-www-form-urlencoded\r\n”
+   .”Authorization: Bearer “.LINE_TOKEN.”\r\n”
+   .”Content-Length: “.strlen($queryData).”\r\n”,
+   ‘content’ => $queryData
+ ),
+ ‘ssl’=>array(
+   “verify_peer”=>false,
+   “verify_peer_name”=>false,
+  ),
+);
 $res = notify_message($str,$token);
 print_r($res);
 function notify_message($message,$token){
